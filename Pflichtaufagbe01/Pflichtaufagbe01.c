@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <math.h>
+
+void printTaxTable(int maxIncome, int minIncome, int stepSize, int taxClassInt);
 float calculateTax(int taxClass, int income);
 void printTable(float* tableData, char* headerData, int row, int column);
 
@@ -45,8 +47,13 @@ int main()
 			inputOK = 1;
 		}
 	}
+	printTaxTable( maxIncome,  minIncome,  stepSize,  taxClassInt);
 
-	int rows = ceil(maxIncome * 1.0 - minIncome * 1.0) / (stepSize * 1.0)+1;
+	return 0;
+}
+
+void printTaxTable(int maxIncome, int minIncome, int stepSize, int taxClassInt) {
+	int rows = ceil(maxIncome * 1.0 - minIncome * 1.0) / (stepSize * 1.0) + 1;
 	int columns = 3;
 	int currentRow = 0;
 	float* tableData = malloc(rows * columns * sizeof(float)); //allocate the space for the table
@@ -64,11 +71,8 @@ int main()
 	}
 	char* headerString = "Einkommen     Steuern  Steuersatz\n"; //each set of numbers has a width of 14
 	printTable(tableData, headerString, rows, columns);
-	free(tableData);
-	return 0;
+	free(tableData); //free allocted space
 }
-
-
 
 
 float calculateTax(int taxClass, int income) {
