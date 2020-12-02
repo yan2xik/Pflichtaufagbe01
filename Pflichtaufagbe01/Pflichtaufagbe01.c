@@ -6,12 +6,11 @@
 float calculateTax(int taxClass, int income);
 void printTable(float* tableData, char* headerData, int row, int column);
 
-struct taxBracket {
-	int upperLimit;
-	float rate;
+struct taxBracket { //
+	int upperLimit; //this is technically just the width of the bracket so if you want a bracket from 50000 to 75000 you need to set this to 25000 they also need to be ascending in value
+	float rate; //rate not in percent
 };
 struct taxClass {
-
 	int deductable;
 };
 //declare all valid to be used tax brackets, declare last with int_max
@@ -55,7 +54,7 @@ int main()
 		float ic = income * 1.0f; //convert to float so it can be added to array
 		float tax = calculateTax(taxClassInt, income);
 		float taxRate = 0;
-		if (tax > 0.01) {
+		if (ic > 0.01) { //avoids division by 0
 			taxRate = tax / ic * 100;
 		}
 		tableData[currentRow * columns] = ic;
@@ -80,8 +79,8 @@ float calculateTax(int taxClass, int income) {
 	int currentTaxBracket = 0;
 	while (income > 0) {
 		if (income > TAX_BRACKETS[currentTaxBracket].upperLimit) {
-			dueTaxes += TAX_BRACKETS[currentTaxBracket].upperLimit * TAX_BRACKETS[currentTaxBracket].rate;
-			income -= TAX_BRACKETS[currentTaxBracket].upperLimit; // do I risk an underflow?
+			dueTaxes += TAX_BRACKETS[currentTaxBracket].upperLimit * TAX_BRACKETS[currentTaxBracket].rate; //takem max amount for bracket and advance to next
+			income -= TAX_BRACKETS[currentTaxBracket].upperLimit; // do I risk an underflow? //subtract income, what is left in income is the amount that still needs to taxed
 			currentTaxBracket++; //advance to next bracket
 		}
 		else { //last bracket
@@ -92,13 +91,13 @@ float calculateTax(int taxClass, int income) {
 	return dueTaxes;
 }
 
-void printTable(float* tableData, char* headerData, int row, int column) {
+void printTable(float* tableData, char* headerData, int row, int column) { //float has to be filled in the same way its printed row by row
 	printf(headerData);
 	for (int i = 0; i < row; i++) {
 		for (int a = 0; a < column; a++) {
-			printf_s("%9.1f   ", tableData[i * column + a]); //prints each number as 8+1+1 width with 1 number past the decimal and 4 spaces = 14 chars
+			printf_s("%9.1f   ", tableData[i * column + a]); //prints each number with a width of 9 and 1 number past the decimal and 4 spaces. there a leading spaces not 0s
 		}
-		printf_s("\n");
+		printf_s("\n"); //start printing next row
 	}
 }
 
