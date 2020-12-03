@@ -15,9 +15,9 @@ struct taxBracket { //
 struct taxClass {
 	int deductable;
 };
-//declare all valid to be used tax brackets, declare last with int_max
-static struct taxBracket TAX_BRACKETS[] = { {.upperLimit = 12000, .rate = 0.15}, {.upperLimit = 28000-12000, .rate = 0.22},{.upperLimit = 50000-28000, .rate = 0.32}, {.upperLimit = _CRT_INT_MAX, .rate = 0.45} };
-static struct taxClass TAX_CLASSES[] = { {.deductable = 10000}, {.deductable = 20000} };
+//declare all valid to be used tax brackets, declare last with int_max //static is implied
+struct taxBracket TAX_BRACKETS[] = { {.upperLimit = 12000, .rate = 0.15}, {.upperLimit = 28000-12000, .rate = 0.22},{.upperLimit = 50000-28000, .rate = 0.32}, {.upperLimit = _CRT_INT_MAX, .rate = 0.45} };
+struct taxClass TAX_CLASSES[] = { {.deductable = 10000}, {.deductable = 20000} };
 
 int main()
 {
@@ -49,7 +49,7 @@ int main()
 	}
 	printTaxTable( maxIncome,  minIncome,  stepSize,  taxClassInt);
 
-	return 0;
+	return 1;
 }
 
 void printTaxTable(int maxIncome, int minIncome, int stepSize, int taxClassInt) {
@@ -57,8 +57,12 @@ void printTaxTable(int maxIncome, int minIncome, int stepSize, int taxClassInt) 
 	int columns = 3;
 	int currentRow = 0;
 	float* tableData = malloc(rows * columns * sizeof(float)); //allocate the space for the table
+	if (tableData == NULL) { //check if pointer is null to avoid allocation issues
+		printf_s("Pointer erstellen fehlgeschalgen, abort");
+		exit(0);
+	}
 	for (int income = minIncome; income <= maxIncome; income += stepSize) {
-		float ic = income * 1.0f; //convert to float so it can be added to array
+		float ic = income * 1.0f; //convert to float so it can be added the "array"
 		float tax = calculateTax(taxClassInt, income);
 		float taxRate = 0;
 		if (ic > 0.01) { //avoids division by 0
