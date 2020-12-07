@@ -2,6 +2,7 @@
 //
 #include <stdio.h>
 #include <stdbool.h>
+#include <malloc.h>
 #include <math.h>
 
 void printTaxTable(int maxIncome, int minIncome, int stepSize, int taxClassInt);
